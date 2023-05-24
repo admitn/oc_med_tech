@@ -142,6 +142,12 @@ $(document).ready(function() {
 	$(document).ajaxStop(function() {
 		$('[data-toggle=\'tooltip\']').tooltip({container: 'body'});
 	});
+
+	// cart hover
+	$("#cart").mouseenter(function () {
+		$(this).addClass("open");
+		$(".pull-right").animate({'right' : '0px'},'slow');
+	});
 });
 
 // Cart add remove functions
