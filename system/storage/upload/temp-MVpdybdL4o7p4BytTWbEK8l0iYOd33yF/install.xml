@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<modification>
+  <name>Countdown</name>
+  <code>ntcd-85b55943e8661440</code>
+  <version>0.3.0</version>
+  <author>https://ocmod.net</author>
+  <link>https://ocmod.net</link>
+  <file path="catalog/controller/product/product.php">
+    <operation>
+      <search>if ((float)$product_info['special']) {</search>
+      <add position="after" offset="4"><![CDATA[
+        $data['neat_countdown'] = $this->load->controller('extension/module/neat_countdown');
+      ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/product/category.php">
+    <operation>
+      <search><![CDATA[$results = $this->model_catalog_product->getProducts($filter_data);]]></search>
+      <add position="after"><![CDATA[
+        //== Neat Countdown module
+        $ntcd_ids = array();
+        foreach ($results as $result) {
+          $ntcd_ids[] = $result['product_id'];
+        }
+        $this->load->model('extension/module/neat_countdown');
+        $ntcd_specials = $this->model_extension_module_neat_countdown->getSpecials($ntcd_ids);
+        $ntcd_args = array( 'category_id' => $category_id, 'specials' => $ntcd_specials );
+        $ntcd_results = $this->load->controller('extension/module/neat_countdown/category', $ntcd_args);
+      ]]></add>
+    </operation>
+    <operation>
+      <search>$data['products'][] = array(</search>
+      <add position="after" offset="7"><![CDATA[
+        'neat_countdown' => @$ntcd_results[$result['product_id']],
+      ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/product/compare.php">
+    <operation>
+      <search><![CDATA[foreach ($this->session->data['compare'] as $key => $product_id) {]]></search>
+      <add position="before" offset="1"><![CDATA[
+        //== Neat Countdown module
+        $ntcd_ids = array_values($this->session->data['compare']);
+        $this->load->model('extension/module/neat_countdown');
+        $ntcd_specials = $this->model_extension_module_neat_countdown->getSpecials($ntcd_ids);
+        $ntcd_results = $this->load->controller('extension/module/neat_countdown/compare', $ntcd_specials);
+      ]]></add>
+    </operation>
+    <operation>
+      <search>if ((float)$product_info['special']) {</search>
+      <add position="after" offset="1">
+        $neat_countdown = @$ntcd_results[$product_id];
+      </add>
+    </operation>
+    <operation>
+      <search>if ((float)$product_info['special']) {</search>
+      <add position="after" offset="6">
+        $neat_countdown = false;
+      </add>
+    </operation>
+    <operation>
+      <search>$data['products'][$product_id] = array(</search>
+      <add position="after" offset="5"><![CDATA[
+        'neat_countdown' => $neat_countdown,
+      ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/product/manufacturer.php">
+    <operation>
+      <search><![CDATA[$results = $this->model_catalog_product->getProducts($filter_data);]]></search>
+      <add position="after"><![CDATA[
+        //== Neat Countdown module
+        $ntcd_ids = array();
+        foreach ($results as $result) {
+          $ntcd_ids[] = $result['product_id'];
+        }
+        $this->load->model('extension/module/neat_countdown');
+        $ntcd_specials = $this->model_extension_module_neat_countdown->getSpecials($ntcd_ids);
+        $ntcd_results = $this->load->controller('extension/module/neat_countdown/manufacturer', $ntcd_specials);
+      ]]></add>
+    </operation>
+    <operation>
+      <search>$data['products'][] = array(</search>
+      <add position="after" offset="7"><![CDATA[
+        'neat_countdown' => @$ntcd_results[$result['product_id']],
+      ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/product/search.php">
+    <operation>
+      <search><![CDATA[$results = $this->model_catalog_product->getProducts($filter_data);]]></search>
+      <add position="after"><![CDATA[
+        //== Neat Countdown module
+        $ntcd_ids = array();
+        foreach ($results as $result) {
+          $ntcd_ids[] = $result['product_id'];
+        }
+        $this->load->model('extension/module/neat_countdown');
+        $ntcd_specials = $this->model_extension_module_neat_countdown->getSpecials($ntcd_ids);
+        $ntcd_results = $this->load->controller('extension/module/neat_countdown/search', $ntcd_specials);
+      ]]></add>
+    </operation>
+    <operation>
+      <search>$data['products'][] = array(</search>
+      <add position="after" offset="7"><![CDATA[
+        'neat_countdown' => @$ntcd_results[$result['product_id']],
+      ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/product/special.php">
+    <operation>
+      <search><![CDATA[$results = $this->model_catalog_product->getProductSpecials($filter_data);]]></search>
+      <add position="after"><![CDATA[
+        //== Neat Countdown module
+        $ntcd_ids = array();
+        foreach ($results as $result) {
+          $ntcd_ids[] = $result['product_id'];
+        }
+        $this->load->model('extension/module/neat_countdown');
+        $ntcd_specials = $this->model_extension_module_neat_countdown->getSpecials($ntcd_ids);
+        $ntcd_results = $this->load->controller('extension/module/neat_countdown/special', $ntcd_specials);
+      ]]></add>
+    </operation>
+    <operation>
+      <search>$data['products'][] = array(</search>
+      <add position="after" offset="7"><![CDATA[
+        'neat_countdown' => @$ntcd_results[$result['product_id']],
+      ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/extension/module/featured.php">
+    <operation>
+      <search>$products = array_slice($setting['product'], 0, (int)$setting['limit']);</search>
+      <add position="after"><![CDATA[
+        //== Neat Countdown module
+        $this->load->model('extension/module/neat_countdown');
+        $ntcd_specials = $this->model_extension_module_neat_countdown->getSpecials($products);
+        $ntcd_results = $this->load->controller('extension/module/neat_countdown/featured', $ntcd_specials);
+      ]]></add>
+    </operation>
+    <operation>
+      <search>$data['products'][] = array(</search>
+      <add position="after" offset="7"><![CDATA[
+        'neat_countdown' => @$ntcd_results[$product_info['product_id']],
+      ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/view/theme/*/template/product/product.tpl">
+    <operation>
+      <search><![CDATA[<?php if ($price) { ?>]]></search>
+      <add position="before"><![CDATA[
+          <?php if (isset($neat_countdown) && $neat_countdown != '') { ?>
+          <div class="countdown"><?php echo $neat_countdown; ?></div>
+          <?php } ?>
+        ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/view/theme/*/template/product/category.tpl">
+    <operation>
+      <search><![CDATA[<?php if ($product['price']) { ?>]]></search>
+      <add position="before"><![CDATA[
+          <?php if (isset($product['neat_countdown']) && $product['neat_countdown'] != '') { ?>
+          <div class="countdown"><?php echo $product['neat_countdown']; ?></div>
+          <?php } ?>
+        ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/view/theme/*/template/product/manufacturer_info.tpl">
+    <operation>
+      <search><![CDATA[<?php if ($product['price']) { ?>]]></search>
+      <add position="before"><![CDATA[
+          <?php if (isset($product['neat_countdown']) && $product['neat_countdown'] != '') { ?>
+          <div class="countdown"><?php echo $product['neat_countdown']; ?></div>
+          <?php } ?>
+        ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/view/theme/*/template/product/search.tpl">
+    <operation>
+      <search><![CDATA[<?php if ($product['price']) { ?>]]></search>
+      <add position="before"><![CDATA[
+          <?php if (isset($product['neat_countdown']) && $product['neat_countdown'] != '') { ?>
+          <div class="countdown"><?php echo $product['neat_countdown']; ?></div>
+          <?php } ?>
+        ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/view/theme/*/template/product/special.tpl">
+    <operation>
+      <search><![CDATA[<?php if ($product['price']) { ?>]]></search>
+      <add position="before"><![CDATA[
+          <?php if (isset($product['neat_countdown']) && $product['neat_countdown'] != '') { ?>
+          <div class="countdown"><?php echo $product['neat_countdown']; ?></div>
+          <?php } ?>
+        ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/view/theme/*/template/extension/module/featured.tpl">
+    <operation>
+      <search><![CDATA[<?php if ($product['price']) { ?>]]></search>
+      <add position="before"><![CDATA[
+          <?php if (isset($product['neat_countdown']) && $product['neat_countdown'] != '') { ?>
+          <div class="countdown"><?php echo $product['neat_countdown']; ?></div>
+          <?php } ?>
+        ]]></add>
+    </operation>
+  </file>
+</modification>

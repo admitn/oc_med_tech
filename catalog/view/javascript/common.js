@@ -144,10 +144,33 @@ $(document).ready(function() {
 	});
 
 	// cart hover
+	/*
 	$("#cart").mouseenter(function () {
-		$(this).addClass("open");
-		$(".pull-right").animate({'right' : '0px'},'slow');
+	$(window).resize(function() {
+		if ($(window).width() > 767)
+		{
+			$(this).addClass("open");			
+		}
+		});
 	});
+	*/
+	/*
+	$("#cart").mouseenter(function () {
+		if(window.matchMedia("(min-width: 767px)").matches){
+        	$(this).addClass("open");
+    	}
+		
+		//('#cart .pull-right').stop(true, true).show('slow');
+		//$("#cart .pull-right").style()
+		//$("#cart .pull-right").animate({'left' : '0'},'slow');
+		//$("#cart .pull-right").animate({},'slow');
+	});
+	*/
+	$("#cart").mouseenter(function () {
+		if(window.matchMedia("(min-width: 767px)").matches){
+        	$(this).addClass("open");
+    	}
+    });
 });
 
 // Cart add remove functions

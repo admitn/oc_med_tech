@@ -747,3 +747,11 @@ h2.price {
     background-image: none;
     background-color: #df5c39;
 }
+
+
+#cart.open-mob .pull-right {
+		display: block;
+	}
+@media (min-width: 768px) {
+	
+}
